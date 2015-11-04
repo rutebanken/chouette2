@@ -1,0 +1,41 @@
+<div id="container" style="width:100%; height:400px;"></div>
+<script>
+
+  <%
+    # TODO - Move outside the view
+    series = []
+    intervals = Chouette::VehicleJourneyFrequency.matrix_interval(@matrix)
+    intervals.each do |stop_point_name, departure_time_vjas|
+      series << {
+        name: stop_point_name,
+        data: departure_time_vjas.map{ |departure_time, vjas| vjas.departure_time.strftime("%H.%M").to_f }
+      }
+    end
+  %>
+
+  $(function () {
+    $('#container').highcharts({
+      title: false,
+      chart: {
+        zoomType: 'x'
+      },
+      xAxis: {
+        title: {
+          text: 'Stop points'
+        },
+        labels: {
+          enabled: false
+        }
+      },
+      yAxis: {
+        title: {
+          text: 'Time'
+        },
+        labels: {
+          enabled: false
+        }
+      },
+      series: <%= raw series.to_json %>
+    });
+  });
+</script>
