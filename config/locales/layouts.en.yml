@@ -39,3 +39,6 @@ en:
         mail: "Contact us"
         newsletter: "Newsletter"
         forum: "Forum"
+  cookie_info:
+    message: ""
+    help: ""
