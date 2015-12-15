@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151124145300) do
+ActiveRecord::Schema.define(version: 20151215175635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -196,14 +196,14 @@ ActiveRecord::Schema.define(version: 20151124145300) do
   end
 
   create_table "journey_frequencies", force: true do |t|
-    t.integer  "vehicle_journey_id"
-    t.time     "scheduled_headway_interval",                 null: false
-    t.time     "first_departure_time",                       null: false
+    t.integer  "vehicle_journey_id",         limit: 8
+    t.time     "scheduled_headway_interval",                           null: false
+    t.time     "first_departure_time",                                 null: false
     t.time     "last_departure_time"
-    t.boolean  "exact_time",                 default: false
+    t.boolean  "exact_time",                           default: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "timeband_id"
+    t.integer  "timeband_id",                limit: 8
   end
 
   add_index "journey_frequencies", ["timeband_id"], name: "index_journey_frequencies_on_timeband_id", using: :btree
@@ -548,6 +548,9 @@ ActiveRecord::Schema.define(version: 20151124145300) do
 
   add_foreign_key "group_of_lines_lines", "group_of_lines", name: "groupofline_group_fkey", dependent: :delete
   add_foreign_key "group_of_lines_lines", "lines", name: "groupofline_line_fkey", dependent: :delete
+
+  add_foreign_key "journey_frequencies", "timebands", name: "journey_frequencies_timeband_id_fk", dependent: :nullify
+  add_foreign_key "journey_frequencies", "vehicle_journeys", name: "journey_frequencies_vehicle_journey_id_fk", dependent: :nullify
 
   add_foreign_key "journey_patterns", "routes", name: "jp_route_fkey", dependent: :delete
   add_foreign_key "journey_patterns", "stop_points", name: "arrival_point_fkey", column: "arrival_stop_point_id", dependent: :nullify
