@@ -3,7 +3,24 @@ require 'open-uri'
 class Osrm_5_RouteSectionProcessor
 
   def call(route_section)
-    osrm_endpoint = Rails.application.secrets.osrm_endpoint
+
+    # Get all transport-modes from departure-point
+    all_modes = route_section.departure.lines.map do |m|
+      m.transport_mode_name
+    end
+
+    # Ensure only one type of transport-mode exists
+    if all_modes.uniq.length == 1
+      mode = all_modes.first
+    else
+      mode = "default"
+    end
+    mode = mode.downcase
+
+    osrm_endpoint = (!Rails.application.secrets.osrm_endpoint_list.nil? &&               # New configuration of osrm_endpoint_list exists
+                        (Rails.application.secrets.osrm_endpoint_list[mode] ||           # Router configured for transport-mode
+                            Rails.application.secrets.osrm_endpoint_list["default"])) || # Default router configured
+                    Rails.application.secrets.osrm_endpoint                              # Fallback - use old/existing configuration
 
     points_string = (route_section.input_geometry || route_section.default_geometry).points.map do |point|
       "#{point.x.to_f},#{point.y.to_f};"
@@ -13,7 +30,7 @@ class Osrm_5_RouteSectionProcessor
     points_string = points_string.chop
 
     path = "#{osrm_endpoint}/route/v1/driving/#{points_string}?overview=false&steps=true&geometries=polyline"
-    Rails.logger.info "Invoke #{path} for RouteSection StopArea:#{route_section.departure.id} -> StopArea:#{route_section.arrival.id}"
+    Rails.logger.info "Invoke (#{mode}) #{path} for RouteSection StopArea:#{route_section.departure.id} -> StopArea:#{route_section.arrival.id}"
     response = open path
     return nil unless response
 
