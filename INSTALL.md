@@ -66,7 +66,7 @@ cp config/application.example.yml config/application.yml
    See [Google Analytics](https://www.google.fr/intl/fr/analytics/)
 6. Configure the IGN Géoportail Key `geoportail_api_key`
    See [API Géoportail documentation](http://api.ign.fr/accueil)
-7. Configure OSRM Backend URL `osrm_endpoint`
+7. Configure OSRM Backend URL `osrm_endpoint` (or `osrm_endpoint_list` to support multiple osrm-instances for different transportation modes)
    See [Project-OSRM](https://github.com/Project-OSRM/osrm-backend/wiki/Api-usage-policy)
 
 Chouette2 database configuration
