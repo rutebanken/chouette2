@@ -75,6 +75,13 @@ ActiveRecord::Schema.define(version: 20170531120000) do
     t.datetime "updated_at"
   end
 
+  create_table "codespaces", id: :bigserial, force: :cascade do |t|
+    t.string   "xmlns",      null: false
+    t.string   "xmlnsurl",   null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "companies", id: :bigserial, force: :cascade do |t|
     t.string   "objectid",                  null: false
     t.integer  "object_version"
