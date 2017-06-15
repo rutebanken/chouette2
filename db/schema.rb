@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160913121300) do
+ActiveRecord::Schema.define(version: 20170614110000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -397,6 +397,10 @@ ActiveRecord::Schema.define(version: 20160913121300) do
     t.string   "city_name",                       limit: 255
     t.string   "url",                             limit: 255
     t.string   "time_zone",                       limit: 255
+    t.integer  "compass_bearing"
+    t.string   "stop_place_type_name"
+    t.string   "transport_mode_name"
+    t.string   "transport_sub_mode_name"
   end
 
   add_index "stop_areas", ["objectid"], name: "stop_areas_objectid_key", unique: true, using: :btree
