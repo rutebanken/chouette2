@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160913121300) do
+ActiveRecord::Schema.define(version: 20170622081947) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -399,6 +399,7 @@ ActiveRecord::Schema.define(version: 20160913121300) do
     t.string   "time_zone",                       limit: 255
   end
 
+  add_index "stop_areas", ["name"], name: "index_stop_areas_on_name", using: :btree
   add_index "stop_areas", ["objectid"], name: "stop_areas_objectid_key", unique: true, using: :btree
   add_index "stop_areas", ["parent_id"], name: "index_stop_areas_on_parent_id", using: :btree
 
