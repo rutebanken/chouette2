@@ -32,8 +32,15 @@
           <% stop_point.stop_area.lines.each do |line| %>
             <span class="label label-default line"><%= line.number || truncate( line.name, :length => 4 ) %></span>
           <% end %>
-        <% end %> 
-    </p>    
+        <% end %>
+    </p>
+    <p>
+      <%= t('.destination_displays') %>
+      <% unless stop_point.destination_display.nil? %>
+        <span class="label label-default line"><%= stop_point.destination_display.front_text %></span>
+      <% end %>
+    </p>
+    <% end %>
   </div>
 </div>
 
