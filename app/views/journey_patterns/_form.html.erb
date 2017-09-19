@@ -7,22 +7,20 @@
     <%= form.input :comment %>
 
 
-    <label><%= stop_point_ids_label(@journey_pattern) %> </label>
-    <div class="stop-points">
-      <div class="left">
-        <%= form.input :stop_point_ids, :label => stop_point_ids_label(@journey_pattern), :as => :check_boxes, :collection => @route.stop_points.map { |s| [s.stop_area.name, s.id.to_s]}, :input_html => (@journey_pattern.new_record? ? { :checked => 'checked' }:{}) %>
-      </div>
-      <div class="right">
-        <label class="footnote_label"><%= t('.footnotes') %></label>
-        <%= form.semantic_fields_for :footnote_ids do |dd| %>                            <!-- destination_display_ids hash (values below are nested into this fieldset)-->
-          <% @route.stop_points.each do |stop_point| %>
-            <%= dd.semantic_fields_for stop_point.id.to_s do |p| %>                                 <!-- id in destination_display_ids hash -->
-              <%= render "stop_points/stop_point_fields", :p => p, :stop_point => stop_point %>     <!-- fieldset/values (also a hash) on id -->
+        <div class="stop-points">
+          <table class="table table-striped">
+            <tr>
+              <th colspan="3" ><label><%= stop_point_ids_label(@journey_pattern) %></label></th>
+            </tr>
+            <%= form.semantic_fields_for :footnote_ids do |dd| %>                            <!-- destination_display_ids hash (values below are nested into this fieldset)-->
+                <% @route.stop_points.each do |stop_point| %>
+                    <%= dd.semantic_fields_for stop_point.id.to_s do |p| %>                                 <!-- id in destination_display_ids hash -->
+                        <%= render "stop_points/stop_point_fields", :p => p, :stop_point => stop_point, :checked => @journey_pattern.new_record? %>     <!-- fieldset/values (also a hash) on id -->
+                    <% end %>
+                <% end %>
             <% end %>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
+          </table>
+        </div>
 
     <%= form.input :objectid, :required => !@journey_pattern.new_record?, :input_html => {  :title => t("formtastic.titles#{format_restriction_for_locales(@referential)}.journey_pattern.objectid") } %>
   <% end %>
