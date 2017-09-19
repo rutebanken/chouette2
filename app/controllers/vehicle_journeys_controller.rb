@@ -25,7 +25,7 @@ class VehicleJourneysController < ChouetteController
   end
 
   def update
-  #  update_footnote_on_vehicle_journey_at_stops
+    update_footnote_on_vehicle_journey_at_stops
     update!(:alert => t('activerecord.errors.models.vehicle_journey.invalid_times'))
   end
 
@@ -83,13 +83,14 @@ class VehicleJourneysController < ChouetteController
 
   ## updates StopPoint Footnotes on StopPoint
   # - this is done outside the regular update since JourneyPattern uses the stop_point change event mechanism
-#DISABLED until editing works in GUI
   def update_footnote_on_vehicle_journey_at_stops
-    if params[:vehicle_journey_at_stops_attributes][:footnote_ids].present?
-      params[:vehicle_journey_at_stops_attributes][:footnote_ids].each do |k, v|
-        stop_point_id = v[:id]
-        footnote_tokens = v[:footnote_tokens].split(",")
-        Chouette::VehicleJourneyAtStop.find(stop_point_id).footnote_ids = footnote_tokens
+    if params[:vehicle_journey][:vehicle_journey_at_stops_attributes].present?
+      params[:vehicle_journey][:vehicle_journey_at_stops_attributes].each do |k, v|
+        if v[:footnote_ids].present?
+          stop_point_id = v[:id]
+          footnote_tokens = v[:footnote_ids].split(",")
+          Chouette::VehicleJourneyAtStop.find(stop_point_id).footnote_ids = footnote_tokens
+        end
       end
     end
   end
@@ -109,7 +110,8 @@ class VehicleJourneysController < ChouetteController
                                                                                                       :departure_time,
                                                                                                       :departure_day_offset,
                                                                                                       :arrival_day_offset,
-                                                                                                      :footnote_tokens] } )
+                                                                                                      :footnote_tokens,
+                                                                                                      :footnote_ids => []] } )
   end
 
 end
