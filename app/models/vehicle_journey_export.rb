@@ -5,6 +5,7 @@ require "zip"
 class VehicleJourneyExport   
   include ActiveModel::Validations
   include ActiveModel::Conversion
+  include StopPointsHelper
   extend  ActiveModel::Naming
 
   attr_accessor :vehicle_journeys, :route, :vehicle_journey_frequencies
