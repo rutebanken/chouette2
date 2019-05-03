@@ -2,7 +2,15 @@ class Chouette::TridentActiveRecord < Chouette::ActiveRecord
     before_validation :prepare_auto_columns
     after_validation :reset_auto_columns
     
-    after_save :build_objectid
+    after_save do
+      :build_objectid
+
+      # Update the referential last update timestamp
+      # The timestamp is based on the client (Chouette2) timezone
+      connection = ActiveRecord::Base.connection.raw_connection
+      connection.prepare("last update timestamp","UPDATE referential_last_update SET last_update_timestamp=$1")
+      connection.exec_prepared("last update timestamp", [Time::now])
+    end
 
     self.abstract_class = true
     #
