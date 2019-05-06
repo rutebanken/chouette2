@@ -77,24 +77,24 @@ class Chouette::TridentActiveRecord < Chouette::ActiveRecord
     end
     
     def build_objectid
-      logger.info 'start after_create : '+self.objectid
+      #logger.info 'start after_create : '+self.objectid
       if self.objectid.include? ':__pending_id__'
         fix_uniq_objectid
         self.update_attributes( :objectid => self.objectid, :object_version => (self.object_version - 1) )
       end
-      logger.info 'end after_create : '+self.objectid
+      #logger.info 'end after_create : '+self.objectid
     end
 
     # Update the referential last update timestamp
     # The timestamp is based on the client (Chouette2) timezone
     def update_referential_last_update_timestamp
-        logger.info 'Update referential last update timestamp'
+        #logger.info 'Update referential last update timestamp'
         begin
           connection = ActiveRecord::Base.connection.raw_connection
           connection.prepare("last_update_timestamp","UPDATE referential_last_update SET last_update_timestamp=$1")
           connection.exec_prepared("last_update_timestamp", [Time::now])
           connection.exec("DEALLOCATE last_update_timestamp")
-          logger.info 'Updated referential last update timestamp'
+          #logger.info 'Updated referential last update timestamp'
         rescue
           logger.warn 'Could not update referential last update timestamp'
         end
