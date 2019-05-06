@@ -1,17 +1,9 @@
 class Chouette::TridentActiveRecord < Chouette::ActiveRecord
     before_validation :prepare_auto_columns
     after_validation :reset_auto_columns
-    
-    after_save do
-      :build_objectid
 
-      # Update the referential last update timestamp
-      # The timestamp is based on the client (Chouette2) timezone
-      connection = ActiveRecord::Base.connection.raw_connection
-      connection.prepare("last_update_timestamp","UPDATE referential_last_update SET last_update_timestamp=$1")
-      connection.exec_prepared("last_update_timestamp", [Time::now])
-      connection.exec("DEALLOCATE last_update_timestamp")
-    end
+    after_save :build_objectid
+    after_save :update_referential_last_update_timestamp
 
     self.abstract_class = true
     #
@@ -92,6 +84,17 @@ class Chouette::TridentActiveRecord < Chouette::ActiveRecord
       end
       #logger.info 'end after_create : '+self.objectid
     end
+
+    # Update the referential last update timestamp
+    # The timestamp is based on the client (Chouette2) timezone
+    def update_referential_last_update_timestamp
+        logger.info 'Update referential last update timestamp'
+        connection = ActiveRecord::Base.connection.raw_connection
+        connection.prepare("last_update_timestamp","UPDATE referential_last_update SET last_update_timestamp=$1")
+        connection.exec_prepared("last_update_timestamp", [Time::now])
+        connection.exec("DEALLOCATE last_update_timestamp")
+    end
+
 
   validates_presence_of :objectid
   validates_uniqueness_of :objectid
