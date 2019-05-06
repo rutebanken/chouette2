@@ -95,8 +95,9 @@ class Chouette::TridentActiveRecord < Chouette::ActiveRecord
           connection.exec_prepared("last_update_timestamp", [Time::now])
           connection.exec("DEALLOCATE last_update_timestamp")
           #logger.info 'Updated referential last update timestamp'
-        rescue
-          logger.warn 'Could not update referential last update timestamp'
+        rescue => exception
+          puts 'Could not update referential last update timestamp'
+          puts exception.backtrace
         end
     end
 
