@@ -8,8 +8,9 @@ class Chouette::TridentActiveRecord < Chouette::ActiveRecord
       # Update the referential last update timestamp
       # The timestamp is based on the client (Chouette2) timezone
       connection = ActiveRecord::Base.connection.raw_connection
-      connection.prepare("last update timestamp","UPDATE referential_last_update SET last_update_timestamp=$1")
-      connection.exec_prepared("last update timestamp", [Time::now])
+      connection.prepare("last_update_timestamp","UPDATE referential_last_update SET last_update_timestamp=$1")
+      connection.exec_prepared("last_update_timestamp", [Time::now])
+      connection.exec("DEALLOCATE last_update_timestamp")
     end
 
     self.abstract_class = true
