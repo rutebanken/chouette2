@@ -44,8 +44,8 @@ spec:
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
-            - mountPath: /etc/chouette2-service-account
-              name: chouette2-service-account
+            - mountPath: /etc/chouette-service-account
+              name: chouette-key
         - env:
             - name: TZ
               value: Europe/Oslo
