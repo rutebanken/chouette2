@@ -39,7 +39,7 @@ aliases:
     name: Set version in helm dir to $APP_VERSION
     command: |
       echo "Setting helm versions to $APP_VERSION"
-      pushd helm/chouette
+      pushd helm/chouette2
       sed -i "s/version:.*$/version: '$APP_VERSION'/g"  ./Chart.yaml
       sed -i "s/appVersion:.*$/appVersion: '$APP_VERSION'/g"  ./Chart.yaml
       popd
@@ -176,7 +176,7 @@ jobs:
       - run: *GCP-auth
       - run:
           name: Deploy Helm chart to Kubernetes
-          command: helm upgrade --install chouette ./helm/chouette --values=./helm/chouette/values.yaml --values=./helm/chouette/values-$NAMESPACE.yaml --namespace=$NAMESPACE
+          command: helm upgrade --install chouette2 ./helm/chouette2 --values=./helm/chouette2/values.yaml --values=./helm/chouette2/values-$NAMESPACE.yaml --namespace=$NAMESPACE
       - slack-status
   slack-approval:
     executor: slack/alpine
