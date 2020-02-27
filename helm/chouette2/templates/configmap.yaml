@@ -47,6 +47,16 @@ data:
       password: <%= ENV['chouette_db_password'] %>
       postgis_schema: 'shared_extensions'
 
+    development:
+      <<: *default
+      host: localhost
+      database: chouette
+
+    test:
+      <<: *default
+      host: localhost
+      database: chouette-test
+
     production:
       <<: *default
       database: chouette
