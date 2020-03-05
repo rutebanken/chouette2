@@ -86,9 +86,6 @@ jobs:
   build:
     docker:
       - image: ruby:2.3.8-stretch
-        auth:
-          username: _json_key
-          password: $DOCKER_PASSWORD
       - image: mdillon/postgis:9.6
         environment:
           TZ: Europe/Oslo
