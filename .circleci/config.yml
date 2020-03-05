@@ -3,16 +3,6 @@ orbs:
   docker: circleci/docker@0.5.20
   slack: circleci/slack@2.2.0
 executors:
-  cci-toolbox:
-    docker:
-      - image: eu.gcr.io/entur-system-1287/circleci-toolbox-image
-        auth:
-          username: _json_key
-          password: $DOCKER_PASSWORD
-    environment:
-      DEBIAN_FRONTEND: "noninteractive"
-      MAVEN_OPTS: -Xmx3G
-
   entur-cci-toolbox:
     docker:
       - image: entur/cci-toolbox:2.0
@@ -95,7 +85,7 @@ commands:
 jobs:
   build:
     docker:
-      - image: eu.gcr.io/entur-system-1287/circleci-toolbox-image
+      - image: ruby:2.3.8-stretch
         auth:
           username: _json_key
           password: $DOCKER_PASSWORD
