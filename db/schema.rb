@@ -272,11 +272,10 @@ ActiveRecord::Schema.define(version: 20200511163000) do
     t.datetime "creation_time"
     t.string   "creator_id",     limit: 255
     t.integer  "footnote_id",                null: false
-    t.string   "text",                       null: false
-    t.string   "language",                   null: false
+    t.string   "text"
+    t.string   "language"
   end
 
-  add_index "footnote_alternative_texts", ["footnote_id", "language"], name: "footnote_alternative_texts_footnote_id_language", unique: true, using: :btree
   add_index "footnote_alternative_texts", ["objectid"], name: "footnote_alternative_texts_objectid_key", unique: true, using: :btree
 
   create_table "footnotes", id: :bigserial, force: :cascade do |t|
