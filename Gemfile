@@ -141,7 +141,7 @@ group :test, :development do
   gem 'rspec-rails', '~> 3.4.2'
   gem 'fakeweb'
   gem 'capybara', '~> 2.8.1'
-  gem 'poltergeist'
+  gem 'poltergeist', '>= 1.11.0'
   gem 'launchy'
   gem 'factory_girl_rails', '~> 4.0'
   gem 'rb-inotify', require: RUBY_PLATFORM.include?('linux') && 'rb-inotify'
