@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200511163000) do
+ActiveRecord::Schema.define(version: 20200623104500) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -172,6 +172,18 @@ ActiveRecord::Schema.define(version: 20200511163000) do
     t.string "url"
     t.string "further_details"
   end
+
+  create_table "dated_service_journeys", id: :bigserial, force: :cascade do |t|
+    t.string   "objectid",                       null: false
+    t.integer  "object_version"
+    t.datetime "creation_time"
+    t.string   "creator_id",         limit: 255
+    t.date     "operating_day",                  null: false
+    t.integer  "vehicle_journey_id",             null: false
+    t.string   "service_alteration"
+  end
+
+  add_index "dated_service_journeys", ["objectid"], name: "dated_service_journeys_objectid_key", unique: true, using: :btree
 
   create_table "delayed_jobs", id: :bigserial, force: :cascade do |t|
     t.integer  "priority",   default: 0
@@ -480,6 +492,14 @@ ActiveRecord::Schema.define(version: 20200511163000) do
     t.datetime "updated_at"
     t.string   "data_format", default: "neptune"
   end
+
+  create_table "original_dsjs", id: false, force: :cascade do |t|
+    t.integer "original_dsj_id"
+    t.integer "derived_dsj_id"
+  end
+
+  add_index "original_dsjs", ["derived_dsj_id"], name: "original_dsjs_derived_dsj_id_idx", using: :btree
+  add_index "original_dsjs", ["original_dsj_id", "derived_dsj_id"], name: "original_dsjs_original_dsj_id_derived_dsj_id_key", unique: true, using: :btree
 
   create_table "pt_links", id: :bigserial, force: :cascade do |t|
     t.integer  "start_of_link_id", limit: 8
@@ -829,6 +849,7 @@ ActiveRecord::Schema.define(version: 20200511163000) do
   add_foreign_key "booking_arrangements_buy_when", "booking_arrangements", name: "booking_arrangement_buy_when_lines_fkey"
   add_foreign_key "connection_links", "stop_areas", column: "arrival_id", name: "colk_endarea_fkey", on_delete: :cascade
   add_foreign_key "connection_links", "stop_areas", column: "departure_id", name: "colk_startarea_fkey", on_delete: :cascade
+  add_foreign_key "dated_service_journeys", "vehicle_journeys", name: "dated_service_journeys_vehicle_journey_id_fkey"
   add_foreign_key "flexible_service_properties", "booking_arrangements", name: "flexible_props_booking_arrangement_fkey"
   add_foreign_key "footnote_alternative_texts", "footnotes", name: "footnotes_footnote_alternative_texts_fkey"
   add_foreign_key "footnotes_journey_patterns", "footnotes", name: "footnotes_journey_patterns_footnotes_fkey", on_delete: :cascade
@@ -857,6 +878,8 @@ ActiveRecord::Schema.define(version: 20200511163000) do
   add_foreign_key "lines", "networks", name: "line_ptnetwork_fkey", on_delete: :nullify
   add_foreign_key "lines_key_values", "lines", name: "lines_key_values_lines_fkey", on_delete: :cascade
   add_foreign_key "networks", "companies", name: "network_company_fkey", on_delete: :nullify
+  add_foreign_key "original_dsjs", "dated_service_journeys", column: "derived_dsj_id", name: "original_dsjs_derived_dsj_id_fkey"
+  add_foreign_key "original_dsjs", "dated_service_journeys", column: "original_dsj_id", name: "original_dsjs_original_dsj_id_fkey"
   add_foreign_key "route_points", "scheduled_stop_points"
   add_foreign_key "routes", "lines", name: "route_line_fkey", on_delete: :cascade
   add_foreign_key "routes", "routes", column: "opposite_route_id", name: "route_opposite_route_fkey", on_delete: :nullify
