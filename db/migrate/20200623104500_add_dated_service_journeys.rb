@@ -12,15 +12,15 @@ class AddDatedServiceJourneys < ActiveRecord::Migration
     add_index "dated_service_journeys", ["objectid"], :name => "dated_service_journeys_objectid_key", :unique => true
     add_foreign_key "dated_service_journeys", "vehicle_journeys", name: "dated_service_journeys_vehicle_journey_id_fkey"
 
-    create_table :original_dsjs, :id => false, :force => true do |t|
+    create_table :dated_service_journey_refs, :id => false, :force => true do |t|
       t.integer  "original_dsj_id"
       t.integer  "derived_dsj_id"
     end
-    add_index "original_dsjs", ["original_dsj_id", "derived_dsj_id"], :unique => true,
-              :name => "original_dsjs_original_dsj_id_derived_dsj_id_key"
-    add_index "original_dsjs", ["derived_dsj_id"], :name => "original_dsjs_derived_dsj_id_idx"
-    add_foreign_key "original_dsjs", "dated_service_journeys", column: "original_dsj_id",  name: "original_dsjs_original_dsj_id_fkey"
-    add_foreign_key "original_dsjs", "dated_service_journeys", column: "derived_dsj_id",  name: "original_dsjs_derived_dsj_id_fkey"
+    add_index "dated_service_journey_refs", ["original_dsj_id", "derived_dsj_id"], :unique => true,
+              :name => "dated_service_journey_refs_original_dsj_id_derived_dsj_id_key"
+    add_index "dated_service_journey_refs", ["derived_dsj_id"], :name => "dated_service_journey_refs_derived_dsj_id_idx"
+    add_foreign_key "dated_service_journey_refs", "dated_service_journeys", column: "original_dsj_id",  name: "dated_service_journey_refs_original_dsj_id_fkey"
+    add_foreign_key "dated_service_journey_refs", "dated_service_journeys", column: "derived_dsj_id",  name: "dated_service_journey_refs_derived_dsj_id_fkey"
 
   end
 end
