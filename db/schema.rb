@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200623104500) do
+ActiveRecord::Schema.define(version: 20200917110200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,32 @@ ActiveRecord::Schema.define(version: 20200623104500) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "blocks", id: :bigserial, force: :cascade do |t|
+    t.string   "objectid",                   null: false
+    t.integer  "object_version"
+    t.datetime "creation_time"
+    t.string   "creator_id",     limit: 255
+    t.string   "private_code"
+  end
+
+  add_index "blocks", ["objectid"], name: "blocks_objectid_key", unique: true, using: :btree
+
+  create_table "blocks_day_types", id: false, force: :cascade do |t|
+    t.integer "block_id"
+    t.integer "day_type_id"
+  end
+
+  add_index "blocks_day_types", ["block_id", "day_type_id"], name: "blocks_day_types_block_id_day_type_id_key", unique: true, using: :btree
+  add_index "blocks_day_types", ["day_type_id"], name: "blocks_day_types_day_type_id_idx", using: :btree
+
+  create_table "blocks_vehicle_journeys", id: false, force: :cascade do |t|
+    t.integer "block_id"
+    t.integer "vehicle_journey_id"
+  end
+
+  add_index "blocks_vehicle_journeys", ["block_id", "vehicle_journey_id"], name: "blocks_vehicle_journeys_block_id_vehicle_journey_id_key", unique: true, using: :btree
+  add_index "blocks_vehicle_journeys", ["vehicle_journey_id"], name: "blocks_vehicle_journeys_vehicle_journey_id_idx", using: :btree
 
   create_table "booking_arrangements", id: :bigserial, force: :cascade do |t|
     t.string  "booking_note"
@@ -844,6 +870,10 @@ ActiveRecord::Schema.define(version: 20200623104500) do
   add_foreign_key "access_links", "access_points", name: "aclk_acpt_fkey", on_delete: :cascade
   add_foreign_key "access_links", "stop_areas", name: "aclk_area_fkey", on_delete: :cascade
   add_foreign_key "access_points", "stop_areas", name: "access_area_fkey", on_delete: :cascade
+  add_foreign_key "blocks_day_types", "blocks", name: "blocks_day_types_block_id_fkey"
+  add_foreign_key "blocks_day_types", "vehicle_journeys", column: "day_type_id", name: "blocks_day_types_day_type_id_fkey"
+  add_foreign_key "blocks_vehicle_journeys", "blocks", name: "blocks_vehicle_journeys_block_id_fkey"
+  add_foreign_key "blocks_vehicle_journeys", "vehicle_journeys", name: "blocks_vehicle_journeys_vehicle_journey_id_fkey"
   add_foreign_key "booking_arrangements", "contact_structures", column: "booking_contact_id", name: "booking_arrangement_booking_contact_fkey"
   add_foreign_key "booking_arrangements_booking_methods", "booking_arrangements", name: "booking_arrangements_booking_methods_lines_fkey"
   add_foreign_key "booking_arrangements_buy_when", "booking_arrangements", name: "booking_arrangement_buy_when_lines_fkey"
