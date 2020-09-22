@@ -85,14 +85,6 @@ ActiveRecord::Schema.define(version: 20200917110200) do
 
   add_index "blocks", ["objectid"], name: "blocks_objectid_key", unique: true, using: :btree
 
-  create_table "blocks_day_types", id: false, force: :cascade do |t|
-    t.integer "block_id"
-    t.integer "day_type_id"
-  end
-
-  add_index "blocks_day_types", ["block_id", "day_type_id"], name: "blocks_day_types_block_id_day_type_id_key", unique: true, using: :btree
-  add_index "blocks_day_types", ["day_type_id"], name: "blocks_day_types_day_type_id_idx", using: :btree
-
   create_table "blocks_vehicle_journeys", id: false, force: :cascade do |t|
     t.integer "block_id"
     t.integer "vehicle_journey_id"
@@ -752,6 +744,14 @@ ActiveRecord::Schema.define(version: 20200917110200) do
 
   add_index "time_tables", ["objectid"], name: "time_tables_objectid_key", unique: true, using: :btree
 
+  create_table "time_tables_blocks", id: false, force: :cascade do |t|
+    t.integer "block_id"
+    t.integer "time_table_id"
+  end
+
+  add_index "time_tables_blocks", ["block_id"], name: "time_tables_blocks_block_id_idx", using: :btree
+  add_index "time_tables_blocks", ["time_table_id", "block_id"], name: "time_tables_blocks_block_id_time_table_id_key", unique: true, using: :btree
+
   create_table "time_tables_vehicle_journeys", id: false, force: :cascade do |t|
     t.integer "time_table_id",      limit: 8
     t.integer "vehicle_journey_id", limit: 8
@@ -870,8 +870,6 @@ ActiveRecord::Schema.define(version: 20200917110200) do
   add_foreign_key "access_links", "access_points", name: "aclk_acpt_fkey", on_delete: :cascade
   add_foreign_key "access_links", "stop_areas", name: "aclk_area_fkey", on_delete: :cascade
   add_foreign_key "access_points", "stop_areas", name: "access_area_fkey", on_delete: :cascade
-  add_foreign_key "blocks_day_types", "blocks", name: "blocks_day_types_block_id_fkey"
-  add_foreign_key "blocks_day_types", "vehicle_journeys", column: "day_type_id", name: "blocks_day_types_day_type_id_fkey"
   add_foreign_key "blocks_vehicle_journeys", "blocks", name: "blocks_vehicle_journeys_block_id_fkey"
   add_foreign_key "blocks_vehicle_journeys", "vehicle_journeys", name: "blocks_vehicle_journeys_vehicle_journey_id_fkey"
   add_foreign_key "booking_arrangements", "contact_structures", column: "booking_contact_id", name: "booking_arrangement_booking_contact_fkey"
@@ -925,6 +923,8 @@ ActiveRecord::Schema.define(version: 20200917110200) do
   add_foreign_key "stop_points", "scheduled_stop_points"
   add_foreign_key "time_table_dates", "time_tables", name: "tm_date_fkey", on_delete: :cascade
   add_foreign_key "time_table_periods", "time_tables", name: "tm_period_fkey", on_delete: :cascade
+  add_foreign_key "time_tables_blocks", "blocks", name: "time_tables_blocks_block_id_fkey"
+  add_foreign_key "time_tables_blocks", "time_tables", name: "time_tables_blocks_time_table_id_fkey"
   add_foreign_key "time_tables_vehicle_journeys", "time_tables", name: "vjtm_tm_fkey", on_delete: :cascade
   add_foreign_key "time_tables_vehicle_journeys", "vehicle_journeys", name: "vjtm_vj_fkey", on_delete: :cascade
   add_foreign_key "vehicle_journey_at_stops", "stop_points", name: "vjas_sp_fkey", on_delete: :cascade
