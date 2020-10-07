@@ -81,6 +81,8 @@ ActiveRecord::Schema.define(version: 20200917110200) do
     t.datetime "creation_time"
     t.string   "creator_id",     limit: 255
     t.string   "private_code"
+    t.string   "name"
+    t.string   "description"
   end
 
   add_index "blocks", ["objectid"], name: "blocks_objectid_key", unique: true, using: :btree
@@ -88,6 +90,7 @@ ActiveRecord::Schema.define(version: 20200917110200) do
   create_table "blocks_vehicle_journeys", id: false, force: :cascade do |t|
     t.integer "block_id"
     t.integer "vehicle_journey_id"
+    t.integer "position"
   end
 
   add_index "blocks_vehicle_journeys", ["block_id", "vehicle_journey_id"], name: "blocks_vehicle_journeys_block_id_vehicle_journey_id_key", unique: true, using: :btree
