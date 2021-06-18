@@ -1,8 +1,8 @@
 class AddBlockStartEndPoint < ActiveRecord::Migration
   def change
 
-    add_column :blocks, :start_time, :datetime, null: true
-    add_column :blocks, :end_time, :datetime, null: true
+    add_column :blocks, :start_time, :time, null: true
+    add_column :blocks, :end_time, :time, null: true
     add_column :blocks, :end_time_day_offset, :integer, null: true
     add_column :blocks, :start_point_id, :integer, null: true
     add_column :blocks, :end_point_id, :integer, null: true
